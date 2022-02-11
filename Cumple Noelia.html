@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Cumple Noe</title>
+<meta charset="UTF-8">
+<link rel="icon" 
+      type="image/png" 
+      href="http://icons.iconarchive.com/icons/flat-icons.com/flat/512/Cake-icon.png">
+
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /*You can use any kind of background here.*/
+  background: #00BFFF;
+}
+
+canvas {
+  display: block;
+  position: relative;
+  zindex: 1;
+  pointer-events: none;
+}
+
+#content {
+  text-align: center;
+  width: 500px;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -250px;
+  margin-top: -150px;
+  color: silver;
+  font-family: verdana;
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.buttonContainer {
+  display: inline-block;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 20px;
+}
+
+.titulo {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border: none;
+  font: normal normal bold 38px/1 "luckiest-guy", Helvetica, sans-serif;
+  color: rgba(247,118,118,1);
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  letter-spacing: 2px;
+  word-spacing: 1px;
+  background: rgba(255,255,255,0);
+  text-shadow: 1px 3px 0 rgba(20,44,226,0.2) , 1px 8px 0 rgba(0,0,0,0.25) , 2px 2px 2px rgba(0,0,0,0.5) ;
+  -webkit-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) 15ms;
+  -moz-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) 15ms;
+  -o-transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) 15ms;
+  transition: all 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) 15ms;
+}
+
+.titulo:hover {
+  font: normal normal bold 37px/1 "luckiest-guy", Helvetica, sans-serif;
+  color: rgba(159,205,234,1);
+  text-indent: 22px;
+  word-spacing: 2px;
+}
+
+#quedan{
+	color: #d9d9d9;
+text-shadow: #2e2e2e 0 4px 5px;
+font-size: 40px;
+}
+
+h2{
+color: black;
+font-family: "calibri", Garamond, 'Comic Sans';
+letter-spacing: 1px;
+text-align:center;
+font-size: 10em;
+}
+
+
+</style>
+</head>
+
+<body>
+  <header>
+  	<center>
+  	<div class="titulo"><h1>CUMPLEAÑOS DE NOELIA</h1></div>
+<script type="text/javascript" script-name="luckiest-guy" src="http://use.edgefonts.net/luckiest-guy.js"></script>
+    <center> 	
+  </header>
+  
+  <h2>Quedan:	</h2>
+<center>
+<span id="quedan"> </span>
+</center>
+
+
+<script>
+	
+
+    var cumpleaños = new Date("Apr 16 2018 10:00:00").getTime();
+		
+
+var x = setInterval(function() {
+	  var ahora = new Date().getTime();
+	  	var tiempo = (cumpleaños - ahora + 1000) / 1000;
+		var segundos = ("0" + Math.floor(tiempo % 60)).slice(-2);
+		var minutos = ("0" + Math.floor(tiempo / 3600 % 60)).slice(-2);
+		var horas = ("0" + Math.floor(tiempo / 3600 % 60)).slice(-2);
+		var dias = Math.floor(tiempo / (3600 * 24))
+      
+		
+		
+		
+		document.getElementById("quedan").innerHTML = dias + " dias " + horas +" h " + minutos +" min " + segundos + " seg";	
+	  // If the count down is finished, write some text 
+  if (tiempo < 0) {
+    clearInterval(x);
+    document.getElementById("quedan").innerHTML = "¡FELIZ CUMPLEAÑOS!";
+  }
+}, 1000);
+
+
+
+
+</script>  
+<script type="text/javascript" script-name="luckiest-guy" src="http://use.edgefonts.net/luckiest-guy.js"></script>
+<div id="content" style="display:none">
+  ¡¡ Feliz +18 !!
+  <br /> Que ya puedes conducir un coche :D
+  <br />
+  <div class="buttonContainer">
+    <button id="stopButton">Stop Confetti</button>
+    <button id="startButton">Drop Confetti</button>
+  </div>
+</div>
+<canvas id="canvas" style="display:none"></canvas>  
+<script>
+(function () {
+    requestAnimationFrame(mainLoop);
+    const ctx = canvas.getContext("2d");
+    var W,H;
+    var confetti = new Particles();
+    var droppedCount = 0;
+    var particlesPerFrame = 1.5;
+    var wind = 0;
+    var windSpeed = 1; 
+    const windSpeedMax = 1;
+    const windChange = 0.01;
+    const windPosCoef = 0.002;
+    const maxParticlesPerFrame = 2; //max particles dropped per frame
+    var id = 0;
+    stopButton.addEventListener("click",() => particlesPerFrame = 0 );
+    startButton.addEventListener("click",() => particlesPerFrame = maxParticlesPerFrame);
+		const randI = (min, max = min + (min = 0)) => (Math.random() * (max - min) + min) | 0;
+		const rand  = (min = 1, max = min + (min = 0)) => Math.random() * (max - min) + min;    
+    const colors = {
+        options: "DodgerBlue,OliveDrab,Gold,pink,SlateBlue,lightblue,Violet,PaleGreen,SteelBlue,SandyBrown,Chocolate,Crimson".split(","),
+        index: 0,
+        step: 10,
+        get color() { return colors.options[((colors.index++) / colors.step | 0) % colors.options.length] }
+    }
+    function Confetti() { this.setup() }
+    Confetti.prototype = {
+        setup(){        
+            this.x = rand(-35,W + 35);
+            this.y = rand(-30,-35);
+            this.r = rand(10, 30); 
+            this.d = rand(150) + 10; //density;
+            this.color = colors.color;
+            this.tilt = randI(10);
+            this.tiltAngleIncremental = (rand(0.08) + 0.04) * (rand() < 0.5 ? -1 : 1);
+            this.tiltAngle = 0;
+            this.angle = rand(Math.PI * 2);
+            this.id = id++;
+            return this;
+        },
+        update() {
+            this.tiltAngle += this.tiltAngleIncremental * (Math.cos(wind + (this.d + this.x + this.y) * windPosCoef) * 0.2 + 1);
+            this.y += (Math.cos(this.angle + this.d) + 3 + this.r / 2) / 2;
+            this.x += Math.sin(this.angle);
+            this.x += Math.cos(wind + (this.d + this.x + this.y) * windPosCoef) * windSpeedMax;
+            this.y += Math.sin(wind + (this.d + this.x + this.y) * windPosCoef) * windSpeedMax;
+            this.tilt = (Math.sin(this.tiltAngle - (this.id / 3))) * 15;
+            return this.y > H;  // returns true if particle is past bottom
+        },
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.setTransform(
+                Math.cos(this.tiltAngle),  // set the x axis to the tilt angle
+                Math.sin(this.tiltAngle),
+                0, 1,  
+                this.x, this.y    // set the origin
+            ); 
+            ctx.arc(0, 0, (this.r / 2), 0, Math.PI * 2, false);
+            ctx.fill();
+        }
+    }
+    function Particles() {
+        const items = [];
+        const pool = [];
+        this.update = function() {
+            for (var i = 0; i < items.length; i++) {
+                if(items[i].update() === true){ pool.push(items.splice(i--,1)[0]) }
+            }            
+        }
+        this.draw = function() { for (var i = 0; i < items.length; i++) { items[i].draw()  } }
+        this.add = function() {
+            if (pool.length > 0) { items.push(pool.pop().setup()) }
+            else { items.push(new Confetti()) }
+        }
+    }
+    function mainLoop(time) {
+        if (W !== innerWidth || H !== innerHeight) {
+            W = canvas.width = innerWidth;
+            H = canvas.height = innerHeight;
+        } else {
+            ctx.setTransform(1,0,0,1,0,0);
+            ctx.clearRect(0, 0, W, H);
+        }
+        windSpeed = Math.sin(time / 8000) * windSpeedMax;
+        wind += windChange;
+        while(droppedCount < particlesPerFrame){
+           droppedCount += 1;
+           confetti.add();
+        }
+        droppedCount -= particlesPerFrame;
+        confetti.update();
+        confetti.draw();
+        requestAnimationFrame(mainLoop);
+    }
+})();
+</script>
+
+
+
+
+
+</body>
+</html>
